@@ -8,13 +8,19 @@ const Donuts = ({ matcap }: { matcap: Texture }) => {
   const donuts = useMemo(() => {
     const list = [];
     for (let i = 0; i < 100; i++) {
-      const x = (Math.random() - 0.5) * 10;
-      const y = (Math.random() - 0.5) * 10;
-      const z = (Math.random() - 0.5) * 10;
+      let x, y, z;
+      let dist = 0;
+
+      // Repeat until we generate a position far enough from the center
+      do {
+        x = (Math.random() - 0.5) * 10;
+        y = (Math.random() - 0.5) * 10;
+        z = (Math.random() - 0.5) * 10;
+        dist = Math.sqrt(x * x + y * y + z * z);
+      } while (dist < 2.5);
 
       const rotX = Math.random() * Math.PI;
       const rotY = Math.random() * Math.PI;
-
       const scale = Math.random();
 
       list.push(
@@ -28,6 +34,7 @@ const Donuts = ({ matcap }: { matcap: Texture }) => {
         />
       );
     }
+
     return list;
   }, [geometry, material]);
 

@@ -1,21 +1,74 @@
 import { OrbitControls } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
-import { TextureLoader } from "three";
+import { NearestFilter, TextureLoader } from "three";
 import TitleText from "./TitleText";
 import Donuts from "./Donuts";
+import { useEffect, useState } from "react";
+import GUI from "lil-gui";
 
 const Scene = () => {
-  const matcapTexture = useLoader(TextureLoader, "/textures/matcaps/1.png");
+  const [text, setText] = useState("Sup");
+  const [speed, setSpeed] = useState(0.05);
+  const [textureIndex, setTextureIndex] = useState(1);
+
+  const matcapTexture = useLoader(
+    TextureLoader,
+    `/textures/matcaps/${textureIndex}.png`
+  );
+
+  matcapTexture.minFilter = NearestFilter;
+  matcapTexture.magFilter = NearestFilter;
+  matcapTexture.generateMipmaps = false;
+
+  useEffect(() => {
+    const gui = new GUI();
+
+    const params = {
+      text,
+      speed,
+      matcap: textureIndex,
+    };
+
+    gui
+      .add(params, "text")
+      .name("Text")
+      .onChange((value: string) => {
+        setText(value);
+      });
+
+    gui
+      .add(params, "speed", 0.01, 1, 0.01)
+      .name("Camera Speed")
+      .onChange((value: number) => {
+        setSpeed(value);
+      });
+
+    gui
+      .add(params, "matcap", {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+      })
+      .name("Matcap Texture")
+      .onChange((value: number) => {
+        setTextureIndex(value);
+      });
+
+    return () => gui.destroy();
+  }, []);
 
   return (
     <>
-      <ambientLight intensity={0.1} />
-      <directionalLight color="red" position={[0, 0, 5]} />
-      <TitleText matcap={matcapTexture} />
+      <TitleText matcap={matcapTexture} text={text} />
       <Donuts matcap={matcapTexture} />
       <OrbitControls
         autoRotate
-        autoRotateSpeed={0.05}
+        autoRotateSpeed={speed}
         minDistance={2}
         maxDistance={10}
         makeDefault
