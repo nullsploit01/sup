@@ -5,11 +5,19 @@ import TitleText from "./TitleText";
 import Donuts from "./Donuts";
 import { useEffect, useState } from "react";
 import GUI from "lil-gui";
+import FloatingCamera from "./FloatingCamera";
 
 const Scene = () => {
   const [text, setText] = useState("Sup");
-  const [speed, setSpeed] = useState(0.05);
+  const [speed, setSpeed] = useState(0.5);
   const [textureIndex, setTextureIndex] = useState(1);
+  const [zoomInDone, setZoomInDone] = useState(false);
+
+  useEffect(() => {
+    window.onclick = () => {
+      setZoomInDone(true);
+    };
+  }, []);
 
   const matcapTexture = useLoader(
     TextureLoader,
@@ -37,7 +45,7 @@ const Scene = () => {
       });
 
     gui
-      .add(params, "speed", 0.01, 1, 0.01)
+      .add(params, "speed", 0.05, 20, 0.01)
       .name("Camera Speed")
       .onChange((value: number) => {
         setSpeed(value);
@@ -66,13 +74,18 @@ const Scene = () => {
     <>
       <TitleText matcap={matcapTexture} text={text} />
       <Donuts matcap={matcapTexture} />
-      <OrbitControls
-        autoRotate
-        autoRotateSpeed={speed}
-        minDistance={2}
-        maxDistance={10}
-        makeDefault
-      />
+      {zoomInDone ? (
+        <OrbitControls
+          autoRotate
+          autoRotateSpeed={5 * speed}
+          reverseOrbit
+          minDistance={2}
+          maxDistance={10}
+          makeDefault
+        />
+      ) : (
+        <FloatingCamera speed={speed} onDone={() => setZoomInDone(true)} />
+      )}
     </>
   );
 };
