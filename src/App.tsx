@@ -7,7 +7,7 @@ import {
   TextureLoader,
   TorusGeometry,
 } from "three";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 const Donuts = ({ matcap }: { matcap: Texture }) => {
   const geometry = useMemo(() => new TorusGeometry(0.3, 0.2, 20, 45), []);
@@ -44,12 +44,73 @@ const Donuts = ({ matcap }: { matcap: Texture }) => {
 
 const App = () => {
   const matcapTexture = useLoader(TextureLoader, "/textures/matcaps/1.png");
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleDblClick = () => {
+      const canvas = canvasRef.current?.querySelector("canvas");
+
+      if (!canvas) return;
+
+      const fullscreenElement =
+        document.fullscreenElement || (document as any).webkitFullscreenElement;
+
+      if (!fullscreenElement) {
+        if (canvas.requestFullscreen) {
+          canvas.requestFullscreen();
+        } else if ((canvas as any).webkitRequestFullscreen) {
+          (canvas as any).webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          (document as any).webkitExitFullscreen();
+        }
+      }
+    };
+
+    const triggerResizeOnFullscreenChange = () => {
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 100);
+    };
+
+    window.addEventListener("dblclick", handleDblClick);
+    document.addEventListener(
+      "fullscreenchange",
+      triggerResizeOnFullscreenChange
+    );
+    document.addEventListener(
+      "webkitfullscreenchange",
+      triggerResizeOnFullscreenChange
+    );
+    return () => {
+      window.removeEventListener("dblclick", handleDblClick);
+      document.removeEventListener(
+        "fullscreenchange",
+        triggerResizeOnFullscreenChange
+      );
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        triggerResizeOnFullscreenChange
+      );
+    };
+  }, []);
 
   return (
-    <div>
+    <div
+      ref={canvasRef}
+      style={{
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <Canvas
+        style={{ width: "100%", height: "100%" }}
+        dpr={Math.min(window.devicePixelRatio, 2)}
         className="webgl"
-        style={{ width: "100vw", height: "100vh" }}
         camera={{
           fov: 75,
           aspect: window.innerWidth / window.innerHeight,
@@ -76,7 +137,6 @@ const App = () => {
               <meshMatcapMaterial matcap={matcapTexture} />
             </Text3D>
           </Center>
-
           <Donuts matcap={matcapTexture} />
         </mesh>
         <OrbitControls minDistance={2} maxDistance={10} makeDefault />
