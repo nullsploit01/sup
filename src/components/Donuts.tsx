@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { MeshMatcapMaterial, Texture, TorusGeometry } from "three";
+import { useMemo } from 'react';
+import { MeshMatcapMaterial, Texture, TorusGeometry } from 'three';
 
 const spawnRadius = 50;
 
@@ -32,7 +32,7 @@ const Donuts = ({ matcap }: { matcap: Texture }) => {
           position={[x, y, z]}
           rotation={[rotX, rotY, 0]}
           scale={[scale, scale, scale]}
-        />
+        />,
       );
     }
 

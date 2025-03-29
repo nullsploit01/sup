@@ -1,6 +1,6 @@
-import { useFrame, useThree } from "@react-three/fiber";
-import { useRef, useState } from "react";
-import * as THREE from "three";
+import { useFrame, useThree } from '@react-three/fiber';
+import { useRef, useState } from 'react';
+import * as THREE from 'three';
 
 const FloatingCamera = ({
   initialRadius = 50,
@@ -25,7 +25,7 @@ const FloatingCamera = ({
     radiusRef.current = THREE.MathUtils.lerp(
       radiusRef.current,
       finalRadius,
-      delta * 0.5 // shrink speed
+      delta * 0.5, // shrink speed
     );
 
     const x = Math.sin(timeRef.current) * radiusRef.current;

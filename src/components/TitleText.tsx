@@ -1,6 +1,6 @@
-import { Center, Text3D } from "@react-three/drei";
-import { useEffect, useRef } from "react";
-import { Texture } from "three";
+import { Center, Text3D } from '@react-three/drei';
+import { useEffect, useRef } from 'react';
+import { Texture } from 'three';
 
 const TitleText = ({ matcap, text }: { matcap: Texture; text: string }) => {
   const textRef = useRef<any>(null);
@@ -15,7 +15,7 @@ const TitleText = ({ matcap, text }: { matcap: Texture; text: string }) => {
     <Center>
       <Text3D
         ref={textRef}
-        font={"/fonts/helvetiker_regular.typeface.json"}
+        font={'/fonts/helvetiker_regular.typeface.json'}
         size={1}
         height={0.3}
         curveSegments={7}
