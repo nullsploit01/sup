@@ -1,4 +1,4 @@
-import { OrbitControls, PerspectiveCamera, Text3D } from "@react-three/drei";
+import { Center, OrbitControls, Text3D } from "@react-three/drei";
 import "./App.css";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
@@ -21,20 +21,22 @@ const App = () => {
         <mesh>
           <ambientLight intensity={0.1} />
           <directionalLight color="red" position={[0, 0, 5]} />
-          <Text3D
-            font={"/fonts/helvetiker_regular.typeface.json"}
-            size={1}
-            height={0.3}
-            curveSegments={12}
-            bevelEnabled
-            bevelThickness={0.03}
-            bevelSize={0.02}
-            bevelOffset={0}
-            bevelSegments={5}
-          >
-            Hello R3F!
-            <meshMatcapMaterial matcap={matcapTexture} />
-          </Text3D>
+          <Center>
+            <Text3D
+              font={"/fonts/helvetiker_regular.typeface.json"}
+              size={1}
+              height={0.3}
+              curveSegments={12}
+              bevelEnabled
+              bevelThickness={0.03}
+              bevelSize={0.02}
+              bevelOffset={0}
+              bevelSegments={5}
+            >
+              Sup
+              <meshMatcapMaterial matcap={matcapTexture} />
+            </Text3D>
+          </Center>
         </mesh>
         <OrbitControls makeDefault />
       </Canvas>
