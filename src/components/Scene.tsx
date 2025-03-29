@@ -7,8 +7,19 @@ import GUI from 'lil-gui';
 import { useEffect, useState } from 'react';
 import { NearestFilter, TextureLoader } from 'three';
 
+const getTextFromURL = () => {
+  const url = new URL(window.location.href);
+  return url.searchParams.get('text') || 'Sup';
+};
+
+const updateURLParam = (key: string, value: string) => {
+  const url = new URL(window.location.href);
+  url.searchParams.set(key, value);
+  window.history.replaceState({}, '', url.toString());
+};
+
 const Scene = () => {
-  const [text, setText] = useState('Sup');
+  const [text, setText] = useState(getTextFromURL());
   const [speed, setSpeed] = useState(0.5);
   const [textureIndex, setTextureIndex] = useState(1);
   const [zoomInDone, setZoomInDone] = useState(false);
@@ -39,6 +50,7 @@ const Scene = () => {
       .name('Text')
       .onChange((value: string) => {
         setText(value);
+        updateURLParam('text', value);
       });
 
     gui
