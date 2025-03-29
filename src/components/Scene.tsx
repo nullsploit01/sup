@@ -13,7 +13,13 @@ const Scene = () => {
       <directionalLight color="red" position={[0, 0, 5]} />
       <TitleText matcap={matcapTexture} />
       <Donuts matcap={matcapTexture} />
-      <OrbitControls minDistance={2} maxDistance={10} makeDefault />
+      <OrbitControls
+        autoRotate
+        autoRotateSpeed={0.05}
+        minDistance={2}
+        maxDistance={10}
+        makeDefault
+      />
     </>
   );
 };
